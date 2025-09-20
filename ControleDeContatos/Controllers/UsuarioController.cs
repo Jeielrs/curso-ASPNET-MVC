@@ -71,18 +71,31 @@ namespace ControleDeContatos.Controllers
         {
             try
             {
+                Console.WriteLine($"DEBUG: Recebido POST para criar usuário: {usuario?.Nome}");
+
                 if (ModelState.IsValid)
                 {
+                    Console.WriteLine("DEBUG: ModelState é válido, criando usuário...");
                     usuario = _usuarioRepositorio.Adicionar(usuario);
+                    Console.WriteLine($"DEBUG: Usuário criado com ID: {usuario.Id}");
 
                     TempData["MensagemSucesso"] = "Usuário cadastrado com sucesso!";
                     return RedirectToAction("Index");
+                }
+                else
+                {
+                    Console.WriteLine("DEBUG: ModelState inválido:");
+                    foreach (var error in ModelState)
+                    {
+                        Console.WriteLine($"  {error.Key}: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
+                    }
                 }
 
                 return View(usuario);
             }
             catch (Exception erro)
             {
+                Console.WriteLine($"DEBUG: Erro ao criar usuário: {erro.Message}");
                 TempData["MensagemErro"] = $"Ops, não conseguimos cadastrar seu usuário, tente novamante, detalhe do erro: {erro.Message}";
                 return RedirectToAction("Index");
             }

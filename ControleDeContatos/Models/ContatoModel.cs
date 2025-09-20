@@ -18,6 +18,6 @@ namespace ControleDeContatos.Models
 
         public int? UsuarioId { get; set; }
 
-        public UsuarioModel Usuario { get; set; }
+        public UsuarioModel? Usuario { get; set; }
     }
 }

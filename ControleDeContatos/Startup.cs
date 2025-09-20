@@ -25,9 +25,8 @@ namespace ControleDeContatos
         {
             services.AddControllersWithViews();
 
-            services.AddEntityFrameworkSqlServer()
-                .AddDbContext<BancoContent>(
-                    options => options.UseSqlServer(Configuration.GetConnectionString("DataBase")));
+            services.AddDbContext<BancoContent>(
+                options => options.UseSqlite(Configuration.GetConnectionString("DataBase")));
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -55,8 +54,8 @@ namespace ControleDeContatos
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+                app.UseHttpsRedirection();
             }
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();

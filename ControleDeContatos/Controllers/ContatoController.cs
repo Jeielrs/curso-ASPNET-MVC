@@ -67,21 +67,35 @@ namespace ControleDeContatos.Controllers
         {
             try
             {
+                Console.WriteLine($"DEBUG: Recebido POST para criar contato: {contato?.Nome}");
+
                 if (ModelState.IsValid)
                 {
+                    Console.WriteLine("DEBUG: ModelState é válido, criando contato...");
                     UsuarioModel usuarioLogado = _sessao.BuscarSessaoDoUsuario();
                     contato.UsuarioId = usuarioLogado.Id;
+                    Console.WriteLine($"DEBUG: Usuário logado ID: {usuarioLogado.Id}");
 
                     contato = _contatoRepositorio.Adicionar(contato);
+                    Console.WriteLine($"DEBUG: Contato criado com ID: {contato.Id}");
 
                     TempData["MensagemSucesso"] = "Contato cadastrado com sucesso!";
                     return RedirectToAction("Index");
+                }
+                else
+                {
+                    Console.WriteLine("DEBUG: ModelState inválido:");
+                    foreach (var error in ModelState)
+                    {
+                        Console.WriteLine($"  {error.Key}: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
+                    }
                 }
 
                 return View(contato);
             }
             catch (Exception erro)
-            { 
+            {
+                Console.WriteLine($"DEBUG: Erro ao criar contato: {erro.Message}");
                 TempData["MensagemErro"] = $"Ops, não conseguimos cadastrar seu contato, tente novamante, detalhe do erro: {erro.Message}";
                 return RedirectToAction("Index");
             }
